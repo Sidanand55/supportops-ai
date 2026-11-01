@@ -1,0 +1,16 @@
+fastapi
+uvicorn[standard]
+openai
+pydantic
+pydantic-settings
+python-dotenv
+sqlalchemy
+psycopg[binary]
+alembic
+qdrant-client
+redis
+celery
+langgraph
+httpx
+pytest
+pytest-asyncio
