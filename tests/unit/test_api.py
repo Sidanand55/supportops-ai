@@ -1,9 +1,6 @@
-import pytest
-
 from fastapi.testclient import TestClient
 
 import app.main as main
-
 
 client = TestClient(main.app)
 
@@ -16,7 +13,7 @@ def test_root_endpoint():
 
     assert response.json() == {
         "message": "Welcome to SupportOps AI",
-        "status": "running"
+        "status": "running",
     }
 
 
@@ -26,9 +23,7 @@ def test_health_endpoint():
 
     assert response.status_code == 200
 
-    assert response.json() == {
-        "status": "healthy"
-    }
+    assert response.json() == {"status": "healthy"}
 
 
 def test_chat_endpoint(monkeypatch):
@@ -37,47 +32,28 @@ def test_chat_endpoint(monkeypatch):
 
         return f"Mocked response for: {message}"
 
-    monkeypatch.setattr(
-        main,
-        "generate_response",
-        mock_generate_response
-    )
+    monkeypatch.setattr(main, "generate_response", mock_generate_response)
 
-    response = client.post(
-        "/chat",
-        json={
-            "message": "Where is my order?"
-        }
-    )
+    response = client.post("/chat", json={"message": "Where is my order?"})
 
     assert response.status_code == 200
 
     data = response.json()
 
-    assert data["reply"] == (
-        "Mocked response for: Where is my order?"
-    )
+    assert data["reply"] == ("Mocked response for: Where is my order?")
 
     assert data["provider"] == "openai"
 
 
 def test_chat_rejects_empty_message():
 
-    response = client.post(
-        "/chat",
-        json={
-            "message": ""
-        }
-    )
+    response = client.post("/chat", json={"message": ""})
 
     assert response.status_code == 422
 
 
 def test_chat_rejects_missing_message():
 
-    response = client.post(
-        "/chat",
-        json={}
-    )
+    response = client.post("/chat", json={})
 
     assert response.status_code == 422
