@@ -1,52 +1,40 @@
-import json
 import asyncio
-
+import json
 from pathlib import Path
 
 from app.services.llm.service import generate_response
 
-
-DATASET_PATH = (
-    Path(__file__).parent
-    / "datasets"
-    / "baseline.json"
-)
+DATASET_PATH = Path(__file__).parent / "datasets" / "baseline.json"
 
 
 async def run_evaluations():
-
     with open(DATASET_PATH, "r") as file:
         test_cases = json.load(file)
 
     results = []
 
     for test_case in test_cases:
-
-        response = await generate_response(
-            test_case["input"]
-        )
+        response = await generate_response(test_case["input"])
 
         violations = []
 
         for phrase in test_case["must_not_contain"]:
-
             if phrase.lower() in response.lower():
                 violations.append(phrase)
 
         passed = len(violations) == 0
 
-        results.append({
-            "id": test_case["id"],
-            "category": test_case["category"],
-            "response": response,
-            "passed": passed,
-            "violations": violations
-        })
-
-        print(
-            f'{test_case["id"]}: '
-            f'{"PASS" if passed else "FAIL"}'
+        results.append(
+            {
+                "id": test_case["id"],
+                "category": test_case["category"],
+                "response": response,
+                "passed": passed,
+                "violations": violations,
+            }
         )
+
+        print(f"{test_case['id']}: {'PASS' if passed else 'FAIL'}")
 
     total = len(results)
     passed = sum(r["passed"] for r in results)

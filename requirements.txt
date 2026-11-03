@@ -14,3 +14,7 @@ langgraph
 httpx
 pytest
 pytest-asyncio
+ruff
+pytest
+pytest-asyncio
+httpx
