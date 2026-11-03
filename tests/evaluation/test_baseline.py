@@ -1,14 +1,8 @@
 import json
-
 from pathlib import Path
 
-
 DATASET_PATH = (
-    Path(__file__).parents[2]
-    / "app"
-    / "evaluation"
-    / "datasets"
-    / "baseline.json"
+    Path(__file__).parents[2] / "app" / "evaluation" / "datasets" / "baseline.json"
 )
 
 
@@ -25,7 +19,6 @@ def test_baseline_dataset_is_valid():
     assert len(dataset) >= 15
 
     for case in dataset:
-
         assert "id" in case
         assert "category" in case
         assert "input" in case
