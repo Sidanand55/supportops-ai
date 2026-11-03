@@ -31,16 +31,14 @@ async def health():
 @app.post("/chat", response_model=ChatResponse)
 async def chat(request: ChatRequest):
     try:
-        llm_response: LLMResponse = await generate_response(
-            request.message
-        )
-        
+        llm_response: LLMResponse = await generate_response(request.message)
+
         return ChatResponse(
             reply=llm_response.text,
             model=llm_response.model,
             provider=llm_response.provider,
         )
-        
+
     except ValueError as exc:
         logger.error(
             "LLM configuration error: %s",
@@ -53,14 +51,9 @@ async def chat(request: ChatRequest):
         ) from exc
 
     except OpenAIError:
-        logger.exception(
-            "OpenAI API request failed"
-        )
+        logger.exception("OpenAI API request failed")
 
         raise HTTPException(
             status_code=502,
             detail="LLM provider request failed",
         )
-
-        
-        

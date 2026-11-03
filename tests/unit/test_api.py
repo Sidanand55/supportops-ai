@@ -45,21 +45,18 @@ def test_chat_endpoint(monkeypatch):
 
     response = client.post(
         "/chat",
-        json={
-            "message": "Where is my order?"
-        },
+        json={"message": "Where is my order?"},
     )
 
     assert response.status_code == 200
 
     data = response.json()
 
-    assert data["reply"] == (
-        "Mocked response for: Where is my order?"
-    )
+    assert data["reply"] == ("Mocked response for: Where is my order?")
 
     assert data["provider"] == "openai"
     assert data["model"] == "gpt-4.1-mini"
+
 
 def test_chat_rejects_empty_message():
 

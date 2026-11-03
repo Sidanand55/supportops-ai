@@ -27,7 +27,6 @@ order management tools.
 provider = OpenAIProvider()
 
 
-
 async def generate_response(message: str) -> str:
 
     response = await provider.generate(
@@ -41,7 +40,5 @@ async def generate_response(message: str) -> str:
                 content=message,
             ),
         ]
-        
-        
     )
     return response.text

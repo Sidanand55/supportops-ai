@@ -7,11 +7,9 @@ from app.services.llm.schemas import (
 
 
 class LLMProvider(Protocol):
-    
     async def generate(
         self,
         messages: list[LLMMessage],
         tools: list[dict] | None = None,
-        response_schema: dict | None= None,
-    ) -> LLMResponse:
-        ...
+        response_schema: dict | None = None,
+    ) -> LLMResponse: ...
