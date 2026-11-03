@@ -1,5 +1,5 @@
-from app.core.config import settings
-from app.services.llm.openai_client import get_openai_client
+from app.services.llm.openai_client import OpenAIProvider
+from app.services.llm.schemas import LLMMessage
 
 SYSTEM_PROMPT = """
 You are ShopSphere's customer support assistant.
@@ -24,13 +24,24 @@ You currently do not have access to customer databases or
 order management tools.
 """
 
+provider = OpenAIProvider()
+
+
 
 async def generate_response(message: str) -> str:
 
-    client = get_openai_client()
-
-    response = await client.responses.create(
-        model=settings.OPENAI_MODEL, instructions=SYSTEM_PROMPT, input=message
+    response = await provider.generate(
+        messages=[
+            LLMMessage(
+                role="system",
+                content=SYSTEM_PROMPT,
+            ),
+            LLMMessage(
+                role="user",
+                content=message,
+            ),
+        ]
+        
+        
     )
-
-    return response.output_text
+    return response.text
