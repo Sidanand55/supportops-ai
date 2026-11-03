@@ -15,7 +15,6 @@ async def run_evaluations():
 
     for test_case in test_cases:
         response = await generate_response(test_case["input"])
-
         violations = []
 
         for phrase in test_case["must_not_contain"]:

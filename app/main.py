@@ -4,6 +4,7 @@ from fastapi import FastAPI, HTTPException
 from openai import OpenAIError
 
 from app.schemas.chat import ChatRequest, ChatResponse
+from app.services.llm.schemas import LLMResponse
 from app.services.llm.service import generate_response
 
 logging.basicConfig(level=logging.INFO)
@@ -30,17 +31,29 @@ async def health():
 @app.post("/chat", response_model=ChatResponse)
 async def chat(request: ChatRequest):
     try:
-        reply = await generate_response(request.message)
+        llm_response: LLMResponse = await generate_response(request.message)
 
-        return ChatResponse(reply=reply, model="gpt-4.1-mini", provider="openai")
+        return ChatResponse(
+            reply=llm_response.text,
+            model=llm_response.model,
+            provider=llm_response.provider,
+        )
 
-    except ValueError as e:
-        logger.error("LLM configuration error: %s", e)
+    except ValueError as exc:
+        logger.error(
+            "LLM configuration error: %s",
+            exc,
+        )
+
         raise HTTPException(
-            status_code=500, detail="LLM provider not configured"
-        ) from e
+            status_code=500,
+            detail="LLM provider is not configured",
+        ) from exc
 
     except OpenAIError:
         logger.exception("OpenAI API request failed")
 
-        raise HTTPException(status_code=502, detail="LLM provider request failed")
+        raise HTTPException(
+            status_code=502,
+            detail="LLM provider request failed",
+        )
