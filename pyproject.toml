@@ -1,0 +1,17 @@
+[tool.ruff]
+line-length = 88
+target-version = "py311"
+exclude = [".venv", "venv", "__pycache__"]
+
+[tool.ruff.lint]
+select = ["E", "F", "I"]
+
+[tool.ruff.format]
+quote-style = "double"
+indent-style = "space"
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+asyncio_mode = "auto"
+pythonpath = ["."]
+asyncio_default_fixture_loop_scope = "function"

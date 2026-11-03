@@ -1,5 +1,3 @@
-from openai import OpenAIError
-
 from app.core.config import settings
 from app.services.llm.openai_client import get_openai_client
 
@@ -28,15 +26,11 @@ order management tools.
 
 
 async def generate_response(message: str) -> str:
-    
-    client= get_openai_client()
-    
-    response= await client.responses.create(
-        model=settings.OPENAI_MODEL,
-        instructions=SYSTEM_PROMPT,
-        input=message
+
+    client = get_openai_client()
+
+    response = await client.responses.create(
+        model=settings.OPENAI_MODEL, instructions=SYSTEM_PROMPT, input=message
     )
-    
+
     return response.output_text
-
-
