@@ -1,7 +1,5 @@
 import json
-
 from pathlib import Path
-
 
 DATASET_PATH = (
     Path(__file__).parents[2]
